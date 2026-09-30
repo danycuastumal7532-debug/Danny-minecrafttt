@@ -1,0 +1,828 @@
+import tkinter as tk
+from tkinter import messagebox
+
+
+# ============================================================
+#                    CONFIGURACIÓN
+# ============================================================
+
+APP_TITLE = "Minecraft Quiz"
+WINDOW_WIDTH = 900
+WINDOW_HEIGHT = 650
+
+# Colores de la interfaz
+BG_COLOR = "#121212"
+CARD_COLOR = "#1E1E1E"
+CARD_LIGHT = "#292929"
+TEXT_COLOR = "#FFFFFF"
+SECONDARY_TEXT = "#AAAAAA"
+
+GREEN = "#55FF55"
+GREEN_DARK = "#2E7D32"
+
+YELLOW = "#FFD740"
+ORANGE = "#FF9800"
+RED = "#FF5252"
+
+BUTTON_COLOR = "#388E3C"
+BUTTON_HOVER = "#43A047"
+
+
+# ============================================================
+#                    BANCO DE PREGUNTAS
+# ============================================================
+
+preguntas = [
+
+    # ========================================================
+    # FÁCIL
+    # ========================================================
+
+    {
+        "pregunta": "¿Qué criatura explota cuando se acerca al jugador?",
+        "opciones": ["Zombie", "Creeper", "Esqueleto", "Araña"],
+        "respuesta": "Creeper",
+        "dificultad": "FÁCIL",
+        "puntos": 1
+    },
+
+    {
+        "pregunta": "¿Qué herramienta se utiliza principalmente para picar piedra?",
+        "opciones": ["Pala", "Pico", "Hacha", "Azada"],
+        "respuesta": "Pico",
+        "dificultad": "FÁCIL",
+        "puntos": 1
+    },
+
+    {
+        "pregunta": "¿Qué animal proporciona lana?",
+        "opciones": ["Vaca", "Cerdo", "Oveja", "Pollo"],
+        "respuesta": "Oveja",
+        "dificultad": "FÁCIL",
+        "puntos": 1
+    },
+
+    {
+        "pregunta": "¿Qué objeto permite dormir durante la noche?",
+        "opciones": ["Cofre", "Horno", "Cama", "Yunque"],
+        "respuesta": "Cama",
+        "dificultad": "FÁCIL",
+        "puntos": 1
+    },
+
+    {
+        "pregunta": "¿Qué material se utiliza para fabricar una mesa de trabajo?",
+        "opciones": ["Hierro", "Madera", "Diamante", "Oro"],
+        "respuesta": "Madera",
+        "dificultad": "FÁCIL",
+        "puntos": 1
+    },
+
+    # ========================================================
+    # MEDIA
+    # ========================================================
+
+    {
+        "pregunta": "¿A qué dimensión se llega mediante un portal de obsidiana?",
+        "opciones": ["End", "Nether", "Overworld", "Ciudad Antigua"],
+        "respuesta": "Nether",
+        "dificultad": "MEDIA",
+        "puntos": 2
+    },
+
+    {
+        "pregunta": "¿Qué criatura puede soltar varas de Blaze?",
+        "opciones": ["Ghast", "Blaze", "Enderman", "Zombie"],
+        "respuesta": "Blaze",
+        "dificultad": "MEDIA",
+        "puntos": 2
+    },
+
+    {
+        "pregunta": "¿Qué combinación permite fabricar un Ojo de Ender?",
+        "opciones": [
+            "Perla de Ender y polvo de Blaze",
+            "Diamante y oro",
+            "Obsidiana y hierro",
+            "Pólvora y arena"
+        ],
+        "respuesta": "Perla de Ender y polvo de Blaze",
+        "dificultad": "MEDIA",
+        "puntos": 2
+    },
+
+    {
+        "pregunta": "¿Qué criatura puede teletransportarse?",
+        "opciones": ["Zombie", "Enderman", "Vaca", "Esqueleto"],
+        "respuesta": "Enderman",
+        "dificultad": "MEDIA",
+        "puntos": 2
+    },
+
+    {
+        "pregunta": "¿Qué material se utiliza para fabricar un horno?",
+        "opciones": ["Madera", "Piedra", "Diamante", "Obsidiana"],
+        "respuesta": "Piedra",
+        "dificultad": "MEDIA",
+        "puntos": 2
+    },
+
+    # ========================================================
+    # DIFÍCIL
+    # ========================================================
+
+    {
+        "pregunta": "¿Qué objeto se utiliza para activar un portal del End?",
+        "opciones": [
+            "Ojo de Ender",
+            "Perla de Ender",
+            "Estrella del Nether",
+            "Cristal del End"
+        ],
+        "respuesta": "Ojo de Ender",
+        "dificultad": "DIFÍCIL",
+        "puntos": 3
+    },
+
+    {
+        "pregunta": "¿Qué jefe aparece al construir correctamente su estructura con arena de almas y cabezas de Wither Skeleton?",
+        "opciones": [
+            "Ender Dragon",
+            "Warden",
+            "Wither",
+            "Ravager"
+        ],
+        "respuesta": "Wither",
+        "dificultad": "DIFÍCIL",
+        "puntos": 3
+    },
+
+    {
+        "pregunta": "¿Qué herramienta se utiliza principalmente para obtener madera?",
+        "opciones": ["Pico", "Pala", "Hacha", "Azada"],
+        "respuesta": "Hacha",
+        "dificultad": "DIFÍCIL",
+        "puntos": 3
+    },
+
+    {
+        "pregunta": "¿En qué estructura se encuentra el portal del End?",
+        "opciones": [
+            "Fortaleza del Nether",
+            "Fortaleza",
+            "Aldea",
+            "Monumento oceánico"
+        ],
+        "respuesta": "Fortaleza",
+        "dificultad": "DIFÍCIL",
+        "puntos": 3
+    },
+
+    {
+        "pregunta": "¿Qué criatura es conocida por aparecer en las Ciudades Antiguas?",
+        "opciones": [
+            "Warden",
+            "Creeper",
+            "Ghast",
+            "Slime"
+        ],
+        "respuesta": "Warden",
+        "dificultad": "DIFÍCIL",
+        "puntos": 3
+    },
+
+    {
+        "pregunta": "¿Qué objeto permite volar cuando se utiliza junto con fuegos artificiales?",
+        "opciones": [
+            "Capa",
+            "Élitros",
+            "Escudo",
+            "Armadura de diamante"
+        ],
+        "respuesta": "Élitros",
+        "dificultad": "DIFÍCIL",
+        "puntos": 3
+    },
+
+    {
+        "pregunta": "¿Qué objeto permite obtener efectos de una baliza cuando se coloca correctamente?",
+        "opciones": [
+            "Lingote o gema apropiada",
+            "Palo",
+            "Pan",
+            "Cuerda"
+        ],
+        "respuesta": "Lingote o gema apropiada",
+        "dificultad": "DIFÍCIL",
+        "puntos": 3
+    },
+
+    # ========================================================
+    # MUY DIFÍCIL
+    # LAS ÚLTIMAS 3
+    # ========================================================
+
+    {
+        "pregunta": "¿Qué objeto se obtiene al derrotar al Wither y es necesario para fabricar una baliza?",
+        "opciones": [
+            "Estrella del Nether",
+            "Corazón del mar",
+            "Cristal del End",
+            "Perla de Ender"
+        ],
+        "respuesta": "Estrella del Nether",
+        "dificultad": "MUY DIFÍCIL",
+        "puntos": 5
+    },
+
+    {
+        "pregunta": "¿Cuál de estas combinaciones corresponde a la receta de una baliza?",
+        "opciones": [
+            "Vidrio, obsidiana y estrella del Nether",
+            "Hierro, diamante y cristal del End",
+            "Oro, obsidiana y perla de Ender",
+            "Vidrio, hierro y corazón del mar"
+        ],
+        "respuesta": "Vidrio, obsidiana y estrella del Nether",
+        "dificultad": "MUY DIFÍCIL",
+        "puntos": 5
+    },
+
+    {
+        "pregunta": "¿Cuál es el nivel máximo que puede aparecer como requisito de nivel en una mesa de encantamientos completamente configurada?",
+        "opciones": [
+            "Nivel 15",
+            "Nivel 20",
+            "Nivel 30",
+            "Nivel 50"
+        ],
+        "respuesta": "Nivel 30",
+        "dificultad": "MUY DIFÍCIL",
+        "puntos": 5
+    }
+]
+
+
+# ============================================================
+#                    CLASE PRINCIPAL
+# ============================================================
+
+class MinecraftQuiz:
+
+    def __init__(self, root):
+
+        self.root = root
+
+        self.root.title(APP_TITLE)
+        self.root.geometry(
+            f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}"
+        )
+
+        self.root.minsize(750, 550)
+        self.root.configure(bg=BG_COLOR)
+
+        # Variables del juego
+        self.pregunta_actual = 0
+        self.puntaje = 0
+        self.vidas = 3
+
+        self.respuesta = tk.StringVar()
+
+        self.crear_interfaz()
+        self.mostrar_pregunta()
+
+    # ========================================================
+    #                    INTERFAZ
+    # ========================================================
+
+    def crear_interfaz(self):
+
+        # ----------------------------------------------------
+        # CABECERA
+        # ----------------------------------------------------
+
+        self.header = tk.Frame(
+            self.root,
+            bg="#0B0B0B",
+            height=90
+        )
+
+        self.header.pack(
+            fill="x"
+        )
+
+        self.logo = tk.Label(
+            self.header,
+            text="⛏  MINECRAFT QUIZ",
+            font=("Arial", 24, "bold"),
+            fg=GREEN,
+            bg="#0B0B0B"
+        )
+
+        self.logo.pack(
+            side="left",
+            padx=30,
+            pady=20
+        )
+
+        self.puntaje_label = tk.Label(
+            self.header,
+            text="Puntos: 0",
+            font=("Arial", 13, "bold"),
+            fg=TEXT_COLOR,
+            bg="#0B0B0B"
+        )
+
+        self.puntaje_label.pack(
+            side="right",
+            padx=30
+        )
+
+        # ----------------------------------------------------
+        # CONTENEDOR PRINCIPAL
+        # ----------------------------------------------------
+
+        self.contenedor = tk.Frame(
+            self.root,
+            bg=BG_COLOR
+        )
+
+        self.contenedor.pack(
+            fill="both",
+            expand=True,
+            padx=30,
+            pady=25
+        )
+
+        # ----------------------------------------------------
+        # INFORMACIÓN SUPERIOR
+        # ----------------------------------------------------
+
+        self.info_frame = tk.Frame(
+            self.contenedor,
+            bg=BG_COLOR
+        )
+
+        self.info_frame.pack(
+            fill="x"
+        )
+
+        self.progreso_label = tk.Label(
+            self.info_frame,
+            text="Pregunta 1 / 20",
+            font=("Arial", 12, "bold"),
+            fg=SECONDARY_TEXT,
+            bg=BG_COLOR
+        )
+
+        self.progreso_label.pack(
+            side="left"
+        )
+
+        self.vidas_label = tk.Label(
+            self.info_frame,
+            text="♥ ♥ ♥",
+            font=("Arial", 15, "bold"),
+            fg=RED,
+            bg=BG_COLOR
+        )
+
+        self.vidas_label.pack(
+            side="right"
+        )
+
+        # ----------------------------------------------------
+        # BARRA DE PROGRESO
+        # ----------------------------------------------------
+
+        self.progress_bg = tk.Frame(
+            self.contenedor,
+            bg="#333333",
+            height=10
+        )
+
+        self.progress_bg.pack(
+            fill="x",
+            pady=(10, 20)
+        )
+
+        self.progress_bar = tk.Frame(
+            self.progress_bg,
+            bg=GREEN,
+            height=10,
+            width=1
+        )
+
+        self.progress_bar.place(
+            x=0,
+            y=0,
+            relheight=1
+        )
+
+        # ----------------------------------------------------
+        # TARJETA DE PREGUNTA
+        # ----------------------------------------------------
+
+        self.card = tk.Frame(
+            self.contenedor,
+            bg=CARD_COLOR
+        )
+
+        self.card.pack(
+            fill="both",
+            expand=True
+        )
+
+        # ----------------------------------------------------
+        # DIFICULTAD
+        # ----------------------------------------------------
+
+        self.dificultad_label = tk.Label(
+            self.card,
+            text="FÁCIL",
+            font=("Arial", 11, "bold"),
+            fg=GREEN,
+            bg=CARD_COLOR
+        )
+
+        self.dificultad_label.pack(
+            pady=(25, 10)
+        )
+
+        # ----------------------------------------------------
+        # PREGUNTA
+        # ----------------------------------------------------
+
+        self.pregunta_label = tk.Label(
+            self.card,
+            text="",
+            font=("Arial", 18, "bold"),
+            fg=TEXT_COLOR,
+            bg=CARD_COLOR,
+            wraplength=750
+        )
+
+        self.pregunta_label.pack(
+            padx=40,
+            pady=15
+        )
+
+        # ----------------------------------------------------
+        # OPCIONES
+        # ----------------------------------------------------
+
+        self.opciones_frame = tk.Frame(
+            self.card,
+            bg=CARD_COLOR
+        )
+
+        self.opciones_frame.pack(
+            fill="both",
+            expand=True,
+            padx=50,
+            pady=10
+        )
+
+        self.botones = []
+
+        for i in range(4):
+
+            boton = tk.Radiobutton(
+                self.opciones_frame,
+                text="",
+                variable=self.respuesta,
+                value="",
+                font=("Arial", 12),
+                fg=TEXT_COLOR,
+                bg=CARD_LIGHT,
+                activebackground="#333333",
+                activeforeground=TEXT_COLOR,
+                selectcolor=GREEN_DARK,
+                anchor="w",
+                padx=15,
+                pady=12,
+                wraplength=650
+            )
+
+            boton.pack(
+                fill="x",
+                pady=5
+            )
+
+            self.botones.append(boton)
+
+        # ----------------------------------------------------
+        # BOTÓN
+        # ----------------------------------------------------
+
+        self.boton_comprobar = tk.Button(
+            self.contenedor,
+            text="COMPROBAR RESPUESTA",
+            command=self.comprobar,
+            font=("Arial", 13, "bold"),
+            fg=TEXT_COLOR,
+            bg=BUTTON_COLOR,
+            activebackground=BUTTON_HOVER,
+            activeforeground=TEXT_COLOR,
+            relief="flat",
+            cursor="hand2",
+            padx=20,
+            pady=12
+        )
+
+        self.boton_comprobar.pack(
+            pady=15
+        )
+
+    # ========================================================
+    #                    MOSTRAR PREGUNTA
+    # ========================================================
+
+    def mostrar_pregunta(self):
+
+        pregunta = preguntas[self.pregunta_actual]
+
+        numero = self.pregunta_actual + 1
+        total = len(preguntas)
+
+        # Información
+        self.progreso_label.config(
+            text=f"Pregunta {numero} / {total}"
+        )
+
+        self.puntaje_label.config(
+            text=f"Puntos: {self.puntaje}"
+        )
+
+        # Vidas
+        self.actualizar_vidas()
+
+        # Barra
+        porcentaje = numero / total
+
+        self.progress_bar.place(
+            relwidth=porcentaje,
+            relheight=1
+        )
+
+        # Dificultad
+        dificultad = pregunta["dificultad"]
+
+        colores = {
+            "FÁCIL": GREEN,
+            "MEDIA": YELLOW,
+            "DIFÍCIL": ORANGE,
+            "MUY DIFÍCIL": RED
+        }
+
+        self.dificultad_label.config(
+            text=f"● {dificultad}  |  +{pregunta['puntos']} puntos",
+            fg=colores[dificultad]
+        )
+
+        # Pregunta
+        self.pregunta_label.config(
+            text=pregunta["pregunta"]
+        )
+
+        # Limpiar selección
+        self.respuesta.set("")
+
+        # Opciones
+        for i, boton in enumerate(self.botones):
+
+            boton.config(
+                text=f"{chr(65 + i)}. {pregunta['opciones'][i]}",
+                value=pregunta["opciones"][i]
+            )
+
+    # ========================================================
+    #                    COMPROBAR
+    # ========================================================
+
+    def comprobar(self):
+
+        seleccion = self.respuesta.get()
+
+        if not seleccion:
+
+            messagebox.showwarning(
+                "Minecraft Quiz",
+                "⚠ Selecciona una respuesta antes de continuar."
+            )
+
+            return
+
+        pregunta = preguntas[self.pregunta_actual]
+
+        if seleccion == pregunta["respuesta"]:
+
+            self.puntaje += pregunta["puntos"]
+
+            self.puntaje_label.config(
+                text=f"Puntos: {self.puntaje}"
+            )
+
+            messagebox.showinfo(
+                "¡Correcto!",
+                f"✔ Respuesta correcta\n\n"
+                f"+{pregunta['puntos']} puntos"
+            )
+
+        else:
+
+            self.vidas -= 1
+
+            self.actualizar_vidas()
+
+            messagebox.showerror(
+                "Respuesta incorrecta",
+                f"✘ La respuesta correcta era:\n\n"
+                f"{pregunta['respuesta']}"
+            )
+
+        # ¿Se quedó sin vidas?
+        if self.vidas <= 0:
+
+            self.finalizar(
+                game_over=True
+            )
+
+            return
+
+        # Siguiente pregunta
+        self.pregunta_actual += 1
+
+        if self.pregunta_actual >= len(preguntas):
+
+            self.finalizar()
+
+        else:
+
+            self.mostrar_pregunta()
+
+    # ========================================================
+    #                    VIDAS
+    # ========================================================
+
+    def actualizar_vidas(self):
+
+        vidas = ""
+
+        for i in range(3):
+
+            if i < self.vidas:
+                vidas += "♥ "
+
+            else:
+                vidas += "♡ "
+
+        self.vidas_label.config(
+            text=vidas
+        )
+
+    # ========================================================
+    #                    FINAL
+    # ========================================================
+
+    def finalizar(self, game_over=False):
+
+        # Ocultar elementos del juego
+        self.card.destroy()
+        self.boton_comprobar.destroy()
+        self.progress_bg.destroy()
+
+        if game_over:
+
+            titulo = "GAME OVER"
+            mensaje = "Te quedaste sin vidas."
+
+        else:
+
+            titulo = "¡CUESTIONARIO COMPLETADO!"
+            mensaje = "Has terminado las 20 preguntas."
+
+        maximo = sum(
+            pregunta["puntos"]
+            for pregunta in preguntas
+        )
+
+        porcentaje = (
+            self.puntaje / maximo
+        ) * 100
+
+        # Nueva tarjeta
+        resultado_card = tk.Frame(
+            self.contenedor,
+            bg=CARD_COLOR
+        )
+
+        resultado_card.pack(
+            fill="both",
+            expand=True
+        )
+
+        tk.Label(
+            resultado_card,
+            text=titulo,
+            font=("Arial", 27, "bold"),
+            fg=GREEN if not game_over else RED,
+            bg=CARD_COLOR
+        ).pack(pady=(60, 15))
+
+        tk.Label(
+            resultado_card,
+            text=mensaje,
+            font=("Arial", 14),
+            fg=SECONDARY_TEXT,
+            bg=CARD_COLOR
+        ).pack(pady=10)
+
+        tk.Label(
+            resultado_card,
+            text=f"{self.puntaje} / {maximo}",
+            font=("Arial", 45, "bold"),
+            fg=TEXT_COLOR,
+            bg=CARD_COLOR
+        ).pack(pady=20)
+
+        tk.Label(
+            resultado_card,
+            text=f"Porcentaje: {porcentaje:.1f}%",
+            font=("Arial", 16),
+            fg=SECONDARY_TEXT,
+            bg=CARD_COLOR
+        ).pack()
+
+        # Mensaje según resultado
+        if porcentaje >= 90:
+
+            rango = "🏆 MAESTRO DE MINECRAFT"
+
+        elif porcentaje >= 70:
+
+            rango = "⚔ EXPERTO"
+
+        elif porcentaje >= 50:
+
+            rango = "⛏ MINERO AVANZADO"
+
+        else:
+
+            rango = "🌱 NOVATO"
+
+        tk.Label(
+            resultado_card,
+            text=rango,
+            font=("Arial", 18, "bold"),
+            fg=YELLOW,
+            bg=CARD_COLOR
+        ).pack(pady=20)
+
+        # Botón
+        tk.Button(
+            self.contenedor,
+            text="🔄 VOLVER A JUGAR",
+            command=self.reiniciar,
+            font=("Arial", 13, "bold"),
+            fg=TEXT_COLOR,
+            bg=BUTTON_COLOR,
+            activebackground=BUTTON_HOVER,
+            activeforeground=TEXT_COLOR,
+            relief="flat",
+            cursor="hand2",
+            padx=25,
+            pady=12
+        ).pack(pady=20)
+
+    # ========================================================
+    #                    REINICIAR
+    # ========================================================
+
+    def reiniciar(self):
+
+        self.pregunta_actual = 0
+        self.puntaje = 0
+        self.vidas = 3
+
+        # Limpiar ventana
+        for widget in self.contenedor.winfo_children():
+            widget.destroy()
+
+        # Recrear interfaz
+        self.crear_interfaz()
+
+        self.mostrar_pregunta()
+
+
+# ============================================================
+#                    EJECUTAR PROGRAMA
+# ============================================================
+
+if __name__ == "__main__":
+
+    root = tk.Tk()
+
+    app = MinecraftQuiz(root)
+
+    root.mainloop()
